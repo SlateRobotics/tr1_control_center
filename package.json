@@ -1,0 +1,19 @@
+{
+  "name": "tr1_control_center",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "numjs": "^0.16.0",
+    "rosnodejs": "^2.2.0",
+    "sharp": "^0.20.5"
+  }
+}
