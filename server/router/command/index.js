@@ -7,8 +7,9 @@ var rosnodejs = require('rosnodejs');
 rosnodejs.initNode('/tr1/control_center/command/drive');
 var nh = rosnodejs.nh;
 
-var states = {};
+var states = {} ;
 
+var GoToPosition = nh.advertise('/tr1/go_to_position', 'geometry_msgs/Point');
 var BaseWheelFL = nh.advertise('/tr1/controller/effort/JointBaseWheelFL/command', 'std_msgs/Float64');
 var BaseWheelFR = nh.advertise('/tr1/controller/effort/JointBaseWheelFR/command', 'std_msgs/Float64');
 var BaseWheelBL = nh.advertise('/tr1/controller/effort/JointBaseWheelBL/command', 'std_msgs/Float64');
@@ -35,7 +36,7 @@ router.post('/drive', function (req, res) {
 	var w = req.body.w;
 	var vector = nj.array([x, y]);
 
-	var magnitude = Math.sqrt((x*x) + (y*y));
+	var magnitude = Math.sqrt((x*x) + (y*y) + (w*w));
 
 	var offset = Math.PI / 4.0;
 	var c = Math.cos(offset);
@@ -43,7 +44,6 @@ router.post('/drive', function (req, res) {
 	var rotationMatrix = nj.array([[c, -s], [s, c]]);
 
 	var output = vector.dot(rotationMatrix);
-
 	x = output.get(0);
 	y = output.get(1);
 
@@ -53,8 +53,8 @@ router.post('/drive', function (req, res) {
 	var mbr = x;
 
 	w = w * 2;
-	mfl = mfl + w;
-	mfr = mfr - w;
+	mfl = mfl - w;
+	mfr = mfr + w;
 	mbl = mbl + w;
 	mbr = mbr - w;
 
@@ -88,6 +88,17 @@ router.post('/drive', function (req, res) {
 	states.JointBaseWheelBR = mbr;
 
 	res.json({joints: states});
+});
+
+
+router.post('/say', function (req, res) {
+	console.log('TR1 said: ' + req.body.speechText);
+	res.json({joints: states});
+});
+
+router.post('/go_to_position', function (req, res) {
+	GoToPosition.publish(req.body);
+	res.json({joints: states, message: "Publishing data on /tr1/go_to_position"});
 });
 
 module.exports = router;
