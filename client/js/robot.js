@@ -64,7 +64,8 @@ function Robot () {
 	}
 
 	this.update = function () {
-		// get state from server
+		this.handleControls();
+
 		var dir = this.state.direction;
 		var l = this.state.look;
 		this.drive(dir.x, dir.y, dir.w);
@@ -79,5 +80,102 @@ function Robot () {
 		state = state.replace(/,/g, "\n");
 		state = state.replace(/"/g, "");
 		return state;
+	}
+
+	this.handleControls = function () {
+		this.state.look = this.getLook();
+		this.state.direction = this.getDirection();
+	}
+
+	this.getLook = function () {
+		var a = 65;
+		var w = 87;
+		var s = 83;
+		var d = 68;
+		var look = robot.state.look;
+
+		if (keys[a]) {
+			look.pan = 0.9;
+			map.state.viewAngle -= 0.005;
+		} else if (keys[d]) {
+			look.pan = -0.9;
+			map.state.viewAngle += 0.005;
+		} else {
+			look.pan = 0;
+		}
+
+		if (keys[s]) {
+			look.tilt = -0.9;
+		} else if (keys[w]) {
+			look.tilt = 0.3;
+		} else {
+			look.tilt = 0;
+		}
+
+		if (keys[32] || terminal.input.isfocused == true) { // space bar
+			look = {pan: 0, tilt: 0};
+		}
+
+		if (keys[SHIFT]) {
+			look.pan *= 0.75;
+			look.tilt *= 0.75;
+		}
+
+		return look;
+	}
+
+	this.getDirection = function () {
+		var KEY_Z = 90;
+		var KEY_X = 88;
+
+		var direction = robot.state.direction;
+
+		if (keys[SHIFT]) {
+			if (keys[LEFT_ARROW]) {
+				direction.w = 1;
+				direction.x = 0;
+			} else if (keys[RIGHT_ARROW]) {
+				direction.w = -1;
+				direction.x = 0;
+			} else {
+				direction.w = 0;
+				direction.x = 0;
+			}
+		} else {
+			if (keys[LEFT_ARROW]) {
+				direction.x = 1;
+				direction.w = 0;
+			} else if (keys[RIGHT_ARROW]) {
+				direction.x = -1;
+				direction.w = 0;
+			} else {
+				direction.x = 0;
+				direction.w = 0;
+			}
+		}
+
+		if (keys[DOWN_ARROW]) {
+			direction.y = -1;
+		} else if (keys[UP_ARROW]) {
+			direction.y = 1;
+		} else {
+			direction.y = 0;
+		}
+
+		if (keys[KEY_Z] && !keys[KEY_X]) {
+			direction.x *= 0.75;
+			direction.y *= 0.75;
+			direction.w *= 0.75;
+		} else if (keys[KEY_Z] && keys[KEY_X]) {
+			direction.x *= 0.50;
+			direction.y *= 0.50;
+			direction.w *= 0.50;
+		}
+
+		if (keys[32] || terminal.input.isfocused == true) { // space bar
+			direction = {x: 0, y: 0, w: 0};
+		}
+
+		return direction;
 	}
 }

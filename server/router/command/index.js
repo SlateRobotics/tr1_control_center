@@ -7,7 +7,10 @@ var rosnodejs = require('rosnodejs');
 rosnodejs.initNode('/tr1/control_center/command/drive');
 var nh = rosnodejs.nh;
 
+var sensorMsgs = rosnodejs.require('sensor_msgs');
+
 var states = {} ;
+var jointStates = {};
 
 var GoToPosition = nh.advertise('/tr1/go_to_position', 'geometry_msgs/Point');
 var BaseWheelFL = nh.advertise('/tr1/controller/effort/JointBaseWheelFL/command', 'std_msgs/Float64');
@@ -16,6 +19,11 @@ var BaseWheelBL = nh.advertise('/tr1/controller/effort/JointBaseWheelBL/command'
 var BaseWheelBR = nh.advertise('/tr1/controller/effort/JointBaseWheelBR/command', 'std_msgs/Float64');
 var HeadPan = nh.advertise('/tr1/controller/effort/neck_base_to_neck/command', 'std_msgs/Float64');
 var HeadTilt = nh.advertise('/tr1/controller/effort/neck_to_head/command', 'std_msgs/Float64');
+
+
+nh.subscribe('/joint_states', sensorMsgs.msg.JointState, function (msg) {
+	jointStates = msg;
+});
 
 router.post('/look', function (req, res) {
 	var pan = req.body.pan;
@@ -99,6 +107,10 @@ router.post('/say', function (req, res) {
 router.post('/go_to_position', function (req, res) {
 	GoToPosition.publish(req.body);
 	res.json({joints: states, message: "Publishing data on /tr1/go_to_position"});
+});
+
+router.post('/get_joint_states', function (req, res) {
+	res.json({message: JSON.stringify(jointStates)});
 });
 
 module.exports = router;
