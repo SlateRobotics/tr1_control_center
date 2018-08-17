@@ -32,6 +32,7 @@ source devel/setup.bash
 ## Execution (run each line in seperate windows/tabs)
 ```bash
 roslaunch tr1_hardware_interface tr1_effort_controllers
+roslaunch astra_launch astra.launch
 rosrun web_video_server web_video_server _port:=8081
 rosrun tr1_control_center tr1_control_center.js
 ```
