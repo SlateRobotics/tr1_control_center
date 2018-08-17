@@ -29,7 +29,7 @@ catkin_make
 source devel/setup.bash
 ```
 
-## Execution (run each line in seperate windows/tabs)
+## Execution
 ```bash
 roslaunch tr1_control_center tr1_control_center.launc
 ```
