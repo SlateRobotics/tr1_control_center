@@ -31,5 +31,5 @@ source devel/setup.bash
 
 ## Execution
 ```bash
-roslaunch tr1_control_center tr1_control_center.launc
+roslaunch tr1_control_center tr1_control_center.launch
 ```
