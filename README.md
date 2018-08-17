@@ -4,7 +4,8 @@ This package is a work in process! We're tyring to make a great interface for co
 ## Installation
 Install node.js
 ```bash
-sudo apt-get install nodejs
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
 Install web_video_server
@@ -13,6 +14,17 @@ cd ~/ros_ws/src
 git clone https://github.com/GT-RAIL/async_web_server_cpp
 git clone https://github.com/RobotWebTools/web_video_server
 cd ..
+catkin_make
+source devel/setup.bash
+```
+
+Installing tr1_control_center
+```bash
+cd ~/ros_ws/src/
+git clone https://github.com/slaterobotics/tr1_control_center
+cd tr1_control_center/
+npm i
+cd ~/ros_ws/
 catkin_make
 source devel/setup.bash
 ```
