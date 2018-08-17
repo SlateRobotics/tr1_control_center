@@ -7,7 +7,6 @@ router.use('/js', require('./js'));
 router.use('/css', require('./css'));
 
 router.use('/command', require('./command'));
-router.use('/video', require('./video'));
 
 router.use('/', require('./views'));
 

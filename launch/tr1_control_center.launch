@@ -1,9 +1,12 @@
 <launch>
-  <include file="$(find tr1_hardware_interface)/launch/tr1_effort_controllers.launch"/>
+  <include file="$(find tr1_hardware_interface)/launch/base_effort_arm_trajectory_head_position.launch"/>
+  <include file="$(find tr1_tools)/launch/go_to_position.launch">
+		<param name="controllers" value="false" />
+	</include>
   <include file="$(find astra_launch)/launch/astra.launch"/>
-  <node respawn="true" pkg="web_video_server" type="web_video_server" name="web_video_server_node" >
+  <node respawn="true" pkg="web_video_server" type="web_video_server" name="web_video_server_node" output="screen">
     <param name="port" value="8081" />
 	</node>
-  <node respawn="true" pkg="tr1_control_center" type="tr1_control_center.js" name="tr1_control_center_node" >
+  <node respawn="true" pkg="tr1_control_center" type="tr1_control_center.js" name="tr1_control_center_node" output="screen">
 	</node>
 </launch>
