@@ -10,12 +10,7 @@ sudo apt-get install -y nodejs
 
 Install web_video_server
 ```bash
-cd ~/ros_ws/src
-git clone https://github.com/GT-RAIL/async_web_server_cpp
-git clone https://github.com/RobotWebTools/web_video_server
-cd ..
-catkin_make
-source devel/setup.bash
+sudo apt-get install ros-kinetic-web-video-server
 ```
 
 Installing tr1_control_center
