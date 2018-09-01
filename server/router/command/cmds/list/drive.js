@@ -44,11 +44,13 @@ module.exports = function (cmdr) {
 			outputMagnitude = 1.4142;
 		}
 
-		var scale = magnitude / outputMagnitude;
-		mfl = mfl * scale;
-		mfr = mfr * scale * -1;
-		mbl = mbl * scale;
-		mbr = mbr * scale * -1;
+		if (outputMagnitude != 0) {
+			var scale = magnitude / outputMagnitude;
+			mfl = mfl * scale;
+			mfr = mfr * scale * -1;
+			mbl = mbl * scale;
+			mbr = mbr * scale * -1;
+		}
 
 		cmdr.pubs.get("/tr1/controller/effort/JointBaseWheelFL/command").publish({data: mfl});
 		cmdr.pubs.get("/tr1/controller/effort/JointBaseWheelFR/command").publish({data: mfr});

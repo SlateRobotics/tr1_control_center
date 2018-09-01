@@ -1,0 +1,63 @@
+<launch>
+	<!-- ARGS -->
+  <arg name="control" default="trajectory" />
+  <arg name="world" default="$(find tr1_gazebo)/worlds/tr1_empty.world"/> 
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+	<!-- PARAMS + ROSPARAMS -->
+  <rosparam file="$(find tr1_hardware_interface)/config/hardware.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/controllers_sim.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_limits.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_offsets.yaml" command="load"/>
+
+	<param name="robot_description" command="xacro --inorder $(find tr1_description)/robots/tr1.urdf.xacro" />
+
+	<!-- INCLUDES -->
+  <include file="$(find tr1_tools)/launch/go_to_position.launch">
+		<param name="sim" value="true" />
+	</include>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find tr1_gazebo)/worlds/tr1_empty.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+	<!-- NODES -->
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+		args="
+			/tr1/controller/state
+			/tr1/controller/trajectory/RightPosition
+			/tr1/controller/trajectory/LeftPosition
+			/tr1/controller/position/JointRightGripper
+			/tr1/controller/position/JointLeftGripper
+			/tr1/controller/effort/JointHeadPan
+			/tr1/controller/effort/JointHeadTilt
+			/tr1/controller/effort/JointBaseWheelFR
+			/tr1/controller/effort/JointBaseWheelFL
+     	/tr1/controller/effort/JointBaseWheelBR
+			/tr1/controller/effort/JointBaseWheelBL
+			/tr1/controller/effort/JointTorsoExtension
+		" if="$(eval control == 'trajectory')"/>
+
+  <node respawn="true" pkg="web_video_server" type="web_video_server" name="web_video_server_node" output="screen">
+    <param name="port" value="8081" />
+	</node>
+
+  <node respawn="true" pkg="tr1_control_center" type="tr1_control_center.js" name="tr1_control_center_node" output="screen">
+	</node>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+		<param name="publish_frequency" type="double" value="30.0"/>
+	</node>
+
+  <node name="tr1_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model tr1" />
+
+</launch>

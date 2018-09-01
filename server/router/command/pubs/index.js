@@ -15,8 +15,8 @@ module.exports = function (Commander) {
 	this._pubs["/tr1/controller/effort/JointBaseWheelFR/command"] = Commander.nh.advertise('/tr1/controller/effort/JointBaseWheelFR/command', 'std_msgs/Float64');
 	this._pubs["/tr1/controller/effort/JointBaseWheelBL/command"] = Commander.nh.advertise('/tr1/controller/effort/JointBaseWheelBL/command', 'std_msgs/Float64');
 	this._pubs["/tr1/controller/effort/JointBaseWheelBR/command"] = Commander.nh.advertise('/tr1/controller/effort/JointBaseWheelBR/command', 'std_msgs/Float64');
-	this._pubs["/tr1/controller/effort/neck_base_to_neck/command"] = Commander.nh.advertise('/tr1/controller/effort/neck_base_to_neck/command', 'std_msgs/Float64');
-	this._pubs["/tr1/controller/effort/neck_to_head/command"] = Commander.nh.advertise('/tr1/controller/effort/neck_to_head/command', 'std_msgs/Float64');
+	this._pubs["/tr1/controller/effort/JointHeadPan/command"] = Commander.nh.advertise('/tr1/controller/effort/JointHeadPan/command', 'std_msgs/Float64');
+	this._pubs["/tr1/controller/effort/JointHeadTilt/command"] = Commander.nh.advertise('/tr1/controller/effort/JointHeadTilt/command', 'std_msgs/Float64');
 
 	// should
 	this.get = function (pubTopic) {
@@ -24,7 +24,7 @@ module.exports = function (Commander) {
 			if (this._pubs[pubTopic]) {
 				return this._pubs[pubTopic];
 			} else {
-				throw "pub topic does not exist";
+				throw "pub topic does not exist in publisher list for tr1_control_center";
 				// should add the ability to dynamically create in the future
 			}
 		} else {
