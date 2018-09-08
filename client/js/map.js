@@ -13,13 +13,28 @@ function Map () {
 	}
 
 	this.update = function () {
-
+		this.state.viewAngle = this._getJointHeadPan();
 		this.display();
 	}
 
 	this.display = function () {
 		this._drawWorld();
 		this._drawRobot();
+	}
+
+	this._getJointHeadPan = function () {
+		var jointHeadPanIndex = -1;
+		for (var i = 0; i < joint_states.name.length; i++) {
+			if (joint_states.name[i] == 'JointHeadPan') {
+				jointHeadPanIndex = i;
+			}
+		}
+		
+		if (jointHeadPanIndex > -1) {
+			return joint_states.position[jointHeadPanIndex] * -1.0;
+		} else {
+			return 0;
+		}
 	}
 
 	this._drawWorld = function () {

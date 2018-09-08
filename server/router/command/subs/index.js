@@ -7,6 +7,7 @@
 */
 
 var rosnodejs = require('rosnodejs');
+var config = require('../../../../config.js');
 
 var sub = function (topicName, msgType) {
 	this._listeners = [];
@@ -46,6 +47,14 @@ var sub = function (topicName, msgType) {
 module.exports = function (cmdr) {
 	this._subs = {};
 	this._subs["/joint_states"] = new sub('/joint_states', cmdr.msgs.get('sensor_msgs').JointState);
+
+	config.socketInteface.onReady = function () {
+		config.socketInteface.io.on('connection', function (socket) {
+			this._subs["/joint_states"].addListener('io', function (msg) {
+				socket.emit('joint_states', msg);
+			});
+		}.bind(this));
+	}.bind(this)
 
 	this.get = function (subTopic) {
 		if (subTopic) {

@@ -96,10 +96,8 @@ function Robot () {
 
 		if (keys[a]) {
 			look.pan = 0.9;
-			map.state.viewAngle -= 0.005;
 		} else if (keys[d]) {
 			look.pan = -0.9;
-			map.state.viewAngle += 0.005;
 		} else {
 			look.pan = 0;
 		}

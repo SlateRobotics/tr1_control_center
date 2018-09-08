@@ -2,6 +2,7 @@ var $ = jQuery;
 
 function Menu () {
 	this.state = {};
+	this.state.type = ""; // functions, settings
 	this.state.width = 250;
 	this.state.height = 400;
 	this.state.position = {
@@ -9,7 +10,6 @@ function Menu () {
 		y: canvasHeight - this.state.height - 20
 	}
 
-	this.type = ''; // functions, settings
 	this.visible = false;
 
 	this.buttonFunction = createButton('f(x)');
@@ -43,6 +43,17 @@ function Menu () {
 		this._drawMenu();
 	}
 
+	this._getText = function () {
+		var result = "";
+
+		if (this.state.type == "functions") {
+			result += "Functions";
+		} else if (this.state.type == "settings") {
+			result += "Settings";
+		}
+		return result;
+	}
+
 	this._drawMenu = function () {
 		push();
 		fill('rgba(255,255,255,0.75)');
@@ -51,17 +62,17 @@ function Menu () {
 
 		push();
 		stroke(255);
-		text(this.type, this.state.position.x + 5, this.state.position.y + 5, this.state.width - 5, this.state.height - 5);
+		text(this._getText(), this.state.position.x + 5, this.state.position.y + 5, this.state.width - 5, this.state.height - 5);
 		pop();
 	}
 
 	this.handleMousePressed_Functions = function () {
-		if (this.type == 'functions' || !this.type) this.visible = !this.visible;
-		this.type = 'functions';
+		if (this.state.type == 'functions' || !this.state.type) this.visible = !this.visible;
+		this.state.type = 'functions';
 	};
 
 	this.handleMousePressed_Settings = function () {
-		if (this.type == 'settings' || !this.type) this.visible = !this.visible;
-		this.type = 'settings';
+		if (this.state.type == 'settings' || !this.state.type) this.visible = !this.visible;
+		this.state.type = 'settings';
 	};
 }

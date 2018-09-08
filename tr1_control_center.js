@@ -5,6 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var router = require('./server/router');
+var config = require('./config.js');
 
 var app = express()
 app.use(bodyParser.json())
@@ -17,5 +18,9 @@ app.use(function(req, res, next) {
 
 app.use('/', router);
 
-app.listen(8080);
+var httpServer = app.listen(8080);
 console.log("Listening on port 8080");
+
+var io = require('socket.io')(httpServer);
+config.socketInteface.init(io);
+config.socketInteface.ready();

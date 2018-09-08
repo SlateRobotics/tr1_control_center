@@ -1,6 +1,13 @@
 var functions = [];
 
 functions.push({
+	name: "fart",
+	url: "/command/fart",
+	arguments: [],
+	argumentNames: []
+});
+
+functions.push({
 	name: "say",
 	url: "/command/say",
 	arguments: ["string"],

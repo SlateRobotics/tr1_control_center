@@ -1,5 +1,6 @@
 <launch>
 	<!-- ARGS -->
+  <arg name="server" default="true" />
   <arg name="control" default="trajectory" />
   <arg name="world" default="$(find tr1_gazebo)/worlds/tr1_empty.world"/> 
   <arg name="paused" default="false"/>
@@ -51,7 +52,7 @@
     <param name="port" value="8081" />
 	</node>
 
-  <node respawn="true" pkg="tr1_control_center" type="tr1_control_center.js" name="tr1_control_center_node" output="screen">
+  <node if="$(eval server == true)" respawn="true" pkg="tr1_control_center" type="tr1_control_center.js" name="tr1_control_center_node" output="screen">
 	</node>
 
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">

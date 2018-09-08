@@ -21,6 +21,12 @@ function Terminal () {
 	this.input.elt.onfocus = function (e) { this.input.isfocused = true; }.bind(this);
 	this.input.elt.onblur = function (e) { this.input.isfocused = false; }.bind(this);
 
+  this.state.text.push("Welcome the the TR1 Control Center!");
+  this.state.text.push("Use WASD to look around.");
+  this.state.text.push("Use the arrow keys to drive.");
+  this.state.text.push("Hold SHIFT + Left/Right arrows to turn.");
+  this.state.text.push("Have fun!");
+
 	this.addText = function (t) {
 		this.state.text.push(t);
 	}
